@@ -15,6 +15,7 @@ import com.dfsek.terra.addons.biome.pipeline.api.delegate.BiomeDelegate;
 import com.dfsek.terra.addons.biome.pipeline.api.stage.Stage;
 import com.dfsek.terra.addons.biome.pipeline.config.BiomeDelegateLoader;
 import com.dfsek.terra.addons.biome.pipeline.config.BiomePipelineTemplate;
+import com.dfsek.terra.addons.biome.pipeline.config.ImageSourceTemplate;
 import com.dfsek.terra.addons.biome.pipeline.config.SamplerSourceTemplate;
 import com.dfsek.terra.addons.biome.pipeline.config.stage.expander.ExpanderStageTemplate;
 import com.dfsek.terra.addons.biome.pipeline.config.stage.mutator.BorderListMutatorTemplate;
@@ -66,6 +67,7 @@ public class BiomePipelineAddon implements AddonInitializer {
                     CheckedRegistry<Supplier<ObjectTemplate<BiomeSource>>> sourceRegistry = event.getPack().getOrCreateRegistry(
                             SOURCE_REGISTRY_KEY);
                     sourceRegistry.register(addon.key("SAMPLER"), SamplerSourceTemplate::new);
+                    sourceRegistry.register(addon.key("IMAGE"), ImageSourceTemplate::new);
                 })
                 .then(event -> {
                     CheckedRegistry<Supplier<ObjectTemplate<Stage>>> stageRegistry = event.getPack().getOrCreateRegistry(
