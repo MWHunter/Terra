@@ -15,8 +15,12 @@ public class ImageSourceTemplate extends SourceTemplate {
     @Description("Sets the location of the image on the filesystem, relative to the pack root.")
     private @Meta BufferedImage image;
     
+    @Value("image2")
+    @Description("Sets the location of the image on the filesystem, relative to the pack root.")
+    private @Meta BufferedImage image2;
+    
     @Override
     public BiomeSource get() {
-        return new ImageSamplerSource(image);
+        return new ImageSamplerSource(image, image2);
     }
 }

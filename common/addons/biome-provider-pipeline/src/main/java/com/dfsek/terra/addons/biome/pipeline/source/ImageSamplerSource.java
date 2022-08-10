@@ -1,86 +1,119 @@
 package com.dfsek.terra.addons.biome.pipeline.source;
 
-import com.dfsek.terra.addons.biome.pipeline.api.delegate.BiomeDelegate;
-
 import net.jafama.FastMath;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
 
+import com.dfsek.terra.addons.biome.pipeline.api.delegate.BiomeDelegate;
+
 
 public class ImageSamplerSource implements BiomeSource {
-    private final BufferedImage image;
-    private final double resolution = 4;
+    private final BufferedImage imageOne;
+    private final BufferedImage imageTwo;
     
-    public ImageSamplerSource(BufferedImage image) {
-        this.image = image;
+    public ImageSamplerSource(BufferedImage one, BufferedImage two) {
+        this.imageOne = one;
+        this.imageTwo = two;
     }
     
-    private static int distance(Color a, Color b) {
-        return FastMath.abs(a.getRed() - b.getRed()) + FastMath.abs(a.getGreen() - b.getGreen()) + FastMath.abs(a.getBlue() - b.getBlue());
+    private Color getColor(double x, double z) {
+        int floorX = FastMath.floorToInt(x);
+        int floorZ = FastMath.floorToInt(z);
+        
+        if (floorX >= 0) {
+            return new Color(imageTwo.getRGB(FastMath.floorMod(floorX, imageTwo.getWidth()),
+                                             FastMath.floorMod(floorZ - imageTwo.getHeight() / 2, imageTwo.getHeight())));
+        }
+        
+        return new Color(imageOne.getRGB(FastMath.floorMod(floorX, imageOne.getWidth()),
+                                      FastMath.floorMod(floorZ - imageOne.getHeight() / 2, imageOne.getHeight())));
     }
     
     @Override
     public BiomeDelegate getBiome(double x, double z, long seed) {
-        return getBiome((int) Math.floor(x), (int) Math.floor(z));
-    }
-    
-    public BiomeDelegate getBiome(int x, int z) {
-        x /= resolution;
-        z /= resolution;
-        Color color = new Color(image.getRGB(FastMath.floorMod(x - image.getWidth() / 2, image.getWidth()),
-                                             FastMath.floorMod(z - image.getHeight() / 2, image.getHeight())));
+        int reducedX = FastMath.floorToInt(x / 2d);
+        int reducedZ = FastMath.floorToInt(z / 2d);
         
-        if (color.getRGB() == 0xFF0000ff) {
+        int e = getColor(reducedX, reducedZ).getRGB();
+        int b = getColor(reducedX, reducedZ + 1).getRGB();
+        int d = getColor(reducedX - 1, reducedZ).getRGB();
+        int h = getColor(reducedX, reducedZ - 1).getRGB();
+        int f = getColor(reducedX + 1, reducedZ).getRGB();
+        
+        boolean isXonGrid = x % 2 == 0;
+        boolean isZonGrid = z % 2 == 0;
+        
+        int rgb;
+        
+        // https://www.scale2x.it/algorithm
+        if(isXonGrid) {
+            if(isZonGrid) { // e2
+                rgb = d == h && b != h && d != f ? d : e;
+            } else { // e0
+                rgb = d == b && b != h && d != f ? d : e;
+            }
+        } else {
+            if(isZonGrid) { // e3
+                rgb = h == f && b != h && d != f ? f : e;
+            } else { // e1
+                rgb = b == f && b != h && d != f ? f : e;
+            }
+        }
+        
+        if(rgb == 0xFF0000ff) {
             return BiomeDelegate.ephemeral("tropical-rainforests");
         }
-        if (color.getRGB() == 0xFFE569a2) {
+        if(rgb == 0xFFE569a2) {
             return BiomeDelegate.ephemeral("mountain-ranges");
         }
-        if (color.getRGB() == 0xFFAeaeae) {
+        if(rgb == 0xFFAeaeae) {
             return BiomeDelegate.ephemeral("canada-weird");
         }
-        if (color.getRGB() == 0xFFC84d00) {
+        if(rgb == 0xFFC84d00) {
             return BiomeDelegate.ephemeral("red-sand");
         }
-        if (color.getRGB() == 0xFFFf0000) {
+        if(rgb == 0xFFFf0000) {
             return BiomeDelegate.ephemeral("sand");
         }
-        if (color.getRGB() == 0xFFff9696) {
+        if(rgb == 0xFFff9696) {
             return BiomeDelegate.ephemeral("antarctica");
         }
-        if (color.getRGB() == 0xFFf5a500) {
+        if(rgb == 0xFFf5a500) {
             return BiomeDelegate.ephemeral("western-dry");
         }
-        if (color.getRGB() == 0xFF66130e) {
+        if(rgb == 0xFF66130e) {
             return BiomeDelegate.ephemeral("eastern-dry");
         }
-        if (color.getRGB() == 0xFFc8c800) {
+        if(rgb == 0xFFc8c800) {
+            return BiomeDelegate.ephemeral("mountains");
+        }
+        if(rgb == 0xFFdc698c) {
             return BiomeDelegate.ephemeral("africa-dry");
         }
-        if (color.getRGB() == 0xFFD8352e) {
+        if(rgb == 0xFFD8352e) {
             return BiomeDelegate.ephemeral("warm-ocean");
         }
-        if (color.getRGB() == 0xFFE5bd22) {
+        if(rgb == 0xFFE5bd22) {
             return BiomeDelegate.ephemeral("ocean");
         }
-        if (color.getRGB() == 0xFF67cfac) {
+        if(rgb == 0xFF67cfac) {
             return BiomeDelegate.ephemeral("cold-ocean");
         }
-        if (color.getRGB() == 0xFF06329d) {
+        if(rgb == 0xFF06329d) {
             return BiomeDelegate.ephemeral("frozen-ocean");
         }
-        if (color.getRGB() == 0xFF32c800) {
+        if(rgb == 0xFF32c800) {
             return BiomeDelegate.ephemeral("warm-forest");
         }
-        if (color.getRGB() == 0xFF00ffff) {
+        if(rgb == 0xFF00ffff) {
             return BiomeDelegate.ephemeral("cold-forest");
         }
-        if (color.getRGB() == 0xFF963296) {
+        if(rgb == 0xFF963296) {
             return BiomeDelegate.ephemeral("north-forest");
         }
-        if (color.getRGB() == 0xFF0078ff) {
+        if(rgb == 0xFF0078ff) {
             return BiomeDelegate.ephemeral("tundra");
         }
         return BiomeDelegate.ephemeral("ocean");
@@ -104,6 +137,7 @@ public class ImageSamplerSource implements BiomeSource {
                              BiomeDelegate.ephemeral("warm-forest"),
                              BiomeDelegate.ephemeral("cold-forest"),
                              BiomeDelegate.ephemeral("north-forest"),
-                             BiomeDelegate.ephemeral("tundra"));
+                             BiomeDelegate.ephemeral("tundra"),
+                             BiomeDelegate.ephemeral("mountains"));
     }
 }
