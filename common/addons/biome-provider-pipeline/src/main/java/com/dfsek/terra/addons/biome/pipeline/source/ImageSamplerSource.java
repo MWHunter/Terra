@@ -33,7 +33,10 @@ public class ImageSamplerSource implements BiomeSource {
     
     @Override
     public BiomeDelegate getBiome(double x, double z, long seed) {
-        int reducedX = FastMath.floorToInt(x / 2d);
+        int reducedX = FastMath.floorToInt(x * 2);
+        int reducedZ = FastMath.floorToInt(z * 2);
+        int rgb = getColor(reducedX, reducedZ).getRGB();
+        /*int reducedX = FastMath.floorToInt(x / 2d);
         int reducedZ = FastMath.floorToInt(z / 2d);
         
         int e = getColor(reducedX, reducedZ).getRGB();
@@ -60,12 +63,12 @@ public class ImageSamplerSource implements BiomeSource {
             } else { // e1
                 rgb = b == f && b != h && d != f ? f : e;
             }
-        }
+        }*/
         
         if(rgb == 0xFF0000ff) {
             return BiomeDelegate.ephemeral("tropical-rainforests");
         }
-        if(rgb == 0xFFE569a2) {
+        if(rgb == 0xFFe2699c) {
             return BiomeDelegate.ephemeral("mountain-ranges");
         }
         if(rgb == 0xFFAeaeae) {
