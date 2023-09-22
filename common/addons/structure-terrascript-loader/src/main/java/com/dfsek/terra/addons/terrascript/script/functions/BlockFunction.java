@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import com.dfsek.terra.addons.terrascript.parser.lang.ImplementationArguments;
 import com.dfsek.terra.addons.terrascript.parser.lang.Returnable;
@@ -33,7 +34,7 @@ public class BlockFunction implements Function<Void> {
     protected final Returnable<Number> x, y, z;
     protected final Returnable<String> blockData;
     protected final Platform platform;
-    private final Map<String, BlockState> data = new HashMap<>();
+    private final Map<String, BlockState> data = new ConcurrentHashMap<>();
     private final Returnable<Boolean> overwrite;
     private final Position position;
     

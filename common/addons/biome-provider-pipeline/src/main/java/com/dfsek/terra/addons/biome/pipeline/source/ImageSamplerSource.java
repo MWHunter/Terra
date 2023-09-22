@@ -33,11 +33,18 @@ public class ImageSamplerSource implements BiomeSource {
     
     @Override
     public BiomeDelegate getBiome(double x, double z, long seed) {
-        int reducedX = FastMath.floorToInt(x * 2);
-        int reducedZ = FastMath.floorToInt(z * 2);
+        // This results in the scale we want
+        int reducedX = FastMath.floorToInt(x);
+        int reducedZ = FastMath.floorToInt(z);
         int rgb = getColor(reducedX, reducedZ).getRGB();
-        /*int reducedX = FastMath.floorToInt(x / 2d);
-        int reducedZ = FastMath.floorToInt(z / 2d);
+        
+        // x = 100 -> 200
+        // x = 101 -> 202
+        /*boolean isXonGrid = x % 2 == 0;
+        boolean isZonGrid = z % 2 == 0;
+        
+        int reducedX = FastMath.floorToInt(x * 2d);
+        int reducedZ = FastMath.floorToInt(z * 2d);
         
         int e = getColor(reducedX, reducedZ).getRGB();
         int b = getColor(reducedX, reducedZ + 1).getRGB();
@@ -45,8 +52,6 @@ public class ImageSamplerSource implements BiomeSource {
         int h = getColor(reducedX, reducedZ - 1).getRGB();
         int f = getColor(reducedX + 1, reducedZ).getRGB();
         
-        boolean isXonGrid = x % 2 == 0;
-        boolean isZonGrid = z % 2 == 0;
         
         int rgb;
         
@@ -71,7 +76,7 @@ public class ImageSamplerSource implements BiomeSource {
         if(rgb == 0xFFe2699c) {
             return BiomeDelegate.ephemeral("mountain-ranges");
         }
-        if(rgb == 0xFFAeaeae) {
+        if(rgb == 0xFF89c3ad) {
             return BiomeDelegate.ephemeral("canada-weird");
         }
         if(rgb == 0xFFC84d00) {
@@ -95,18 +100,35 @@ public class ImageSamplerSource implements BiomeSource {
         if(rgb == 0xFFdc698c) {
             return BiomeDelegate.ephemeral("africa-dry");
         }
+        
+        
         if(rgb == 0xFFD8352e) {
-            return BiomeDelegate.ephemeral("warm-ocean");
+            return BiomeDelegate.ephemeral("warm-ocean-shallow");
         }
         if(rgb == 0xFFE5bd22) {
-            return BiomeDelegate.ephemeral("ocean");
+            return BiomeDelegate.ephemeral("ocean-shallow");
         }
         if(rgb == 0xFF67cfac) {
-            return BiomeDelegate.ephemeral("cold-ocean");
+            return BiomeDelegate.ephemeral("cold-ocean-shallow");
         }
         if(rgb == 0xFF06329d) {
+            return BiomeDelegate.ephemeral("frozen-ocean-shallow");
+        }
+        
+        if(rgb == 0xFFff0403) {
+            return BiomeDelegate.ephemeral("warm-ocean");
+        }
+        if(rgb == 0xFFffbe01) {
+            return BiomeDelegate.ephemeral("ocean");
+        }
+        if(rgb == 0xFF23f293) {
+            return BiomeDelegate.ephemeral("cold-ocean");
+        }
+        if(rgb == 0xFF000472) {
             return BiomeDelegate.ephemeral("frozen-ocean");
         }
+        
+        
         if(rgb == 0xFF32c800) {
             return BiomeDelegate.ephemeral("warm-forest");
         }
@@ -133,10 +155,10 @@ public class ImageSamplerSource implements BiomeSource {
                              BiomeDelegate.ephemeral("western-dry"),
                              BiomeDelegate.ephemeral("eastern-dry"),
                              BiomeDelegate.ephemeral("africa-dry"),
-                             BiomeDelegate.ephemeral("warm-ocean"),
-                             BiomeDelegate.ephemeral("ocean"),
-                             BiomeDelegate.ephemeral("cold-ocean"),
-                             BiomeDelegate.ephemeral("frozen-ocean"),
+                             BiomeDelegate.ephemeral("warm-ocean"), BiomeDelegate.ephemeral("warm-ocean-shallow"),
+                             BiomeDelegate.ephemeral("ocean"), BiomeDelegate.ephemeral("ocean-shallow"),
+                             BiomeDelegate.ephemeral("cold-ocean"), BiomeDelegate.ephemeral("cold-ocean-shallow"),
+                             BiomeDelegate.ephemeral("frozen-ocean"), BiomeDelegate.ephemeral("frozen-ocean-shallow"),
                              BiomeDelegate.ephemeral("warm-forest"),
                              BiomeDelegate.ephemeral("cold-forest"),
                              BiomeDelegate.ephemeral("north-forest"),

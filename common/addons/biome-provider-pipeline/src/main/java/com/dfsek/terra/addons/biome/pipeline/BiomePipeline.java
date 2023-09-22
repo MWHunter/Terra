@@ -27,7 +27,7 @@ public class BiomePipeline {
         this.source = source;
         this.stages = stages;
         this.size = size;
-        this.init = init;
+        this.init = 2; // TODO: What does this variable do other than break when it's 1?
     }
     
     /**
